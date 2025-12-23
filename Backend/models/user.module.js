@@ -1,48 +1,68 @@
 import mongoose from "mongoose";
-import { string } from "zod";
-import { required } from "zod/mini";
 
-const userSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
-        trim:true,
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    Lastname:{
-        type:String,
-        required:true,
-        trim:true,
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    email:{
-        type:String,
-        required:true,
-        trim:true,
-        unique:true,
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+      type: String,
+      required: true,
     },
-    aboutMe:{
-        type:String
+    aboutMe: {
+      type: String,
+      default: null,
     },
-    ratings:[{
-        rating:Number,
-        coment:String,
-    }],
-    sceduale:[{
-        startTime:{
-            type:String,
-            required:true
+    ratings: [
+      {
+        rating: Number,
+        comment: String,
+      },
+    ],
+    schedule: [
+      {
+        dayOfWeek: {
+          type: Number,
+          required: true,
+          min: 0,
+          max: 6,
         },
-        endTime:{
-            type:String,
-            required:true
-        }
-    }]
-    
-    
-    
-},{timestamps:true});
+        startMin: {
+          type: Number,
+          required: true,
+          min: 0,
+          max: 1439,
+        },
+        endMin: {
+          type: Number,
+          required: true,
+          min: 0,
+          max: 1439,
+          validate: {
+            validator: function (value) {
+              return value > this.startMin;
+            },
+            message: "end time must be after start time",
+          },
+        },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model("User", userSchema);
