@@ -70,6 +70,16 @@ export const login = async (req, res) => {
   if (!isValid) {
     return res.status(401).json("incorect data");
   }
+  const tokens = generateTokens({ id: check._id, email: check.email });
+
+  res.cookie("accessToken", tokens.accessToken, {
+    httpOnly: true,
+    maxAge: 15 * 60 * 1000,
+  });
+  res.cookie("refreshToken", tokens.refreshToken, {
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
   return res
     .status(200)
     .json({ success: true, account: { name: check.name, email: check.email } });
@@ -87,8 +97,11 @@ export const refresh = async (req, res) => {
       ACCESS_SECRET,
       { expiresIn: "15m" }
     );
-
-    res.json({ accessToken: newAccessToken });
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000,
+    });
+    res.status(200).json("refresh succes");
   } catch (err) {
     res.status(403).json("Invalid Refresh Token");
   }
