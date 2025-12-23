@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import { string } from "zod";
-import { required } from "zod/mini";
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -8,7 +6,7 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim:true,
     },
-    Lastname:{
+    lastName:{
         type:String,
         required:true,
         trim:true,
@@ -18,19 +16,21 @@ const userSchema = new mongoose.Schema({
         required:true,
         trim:true,
         unique:true,
+        lowercase: true
     },
     password:{
         type:String,
         required:true
     },
     aboutMe:{
-        type:String
+        type:String,
+        default:null
     },
     ratings:[{
         rating:Number,
-        coment:String,
+        comment:String,
     }],
-    sceduale:[{
+    schedule:[{
         startTime:{
             type:String,
             required:true
@@ -40,9 +40,6 @@ const userSchema = new mongoose.Schema({
             required:true
         }
     }]
-    
-    
-    
 },{timestamps:true});
 
 export default mongoose.model('User', userSchema);
