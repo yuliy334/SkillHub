@@ -35,28 +35,18 @@ const userSchema = new mongoose.Schema(
     ],
     schedule: [
       {
-        dayOfWeek: {
-          type: Number,
+        start: {
+          type: Date,
           required: true,
-          min: 0,
-          max: 6,
         },
-        startMin: {
-          type: Number,
+        end: {
+          type: Date,
           required: true,
-          min: 0,
-          max: 1439,
-        },
-        endMin: {
-          type: Number,
-          required: true,
-          min: 0,
-          max: 1439,
           validate: {
             validator: function (value) {
-              return value > this.startMin;
+              return value > this.start;
             },
-            message: "end time must be after start time",
+            message: "End time must be after start time",
           },
         },
       },
