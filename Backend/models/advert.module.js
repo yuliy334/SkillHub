@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import { type } from "os";
-import { string } from "zod";
-import { required } from "zod/mini";
 
 const advertSchema = new mongoose.Schema({
   userId: {
