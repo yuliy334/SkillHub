@@ -1,40 +1,50 @@
 import mongoose from "mongoose";
+import { type } from "os";
 import { string } from "zod";
 import { required } from "zod/mini";
 
-
 const advertSchema = new mongoose.Schema({
-    userId:{
-        type:String,
-        required:true
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  userWanted: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Skill",
     },
-    userWanted:{
-        type:[String]
+  ],
+  userOffers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Skill",
     },
-    userOffers:{
-        type:[String]
-    },
-    deals:[{
-        requesterId:{
-            type:String,
-            required:true
-        },
-        requestorWanted:{
-            type:[String],
-            required:true
-        },    
-        requestorOffers:{
-            type:[String],
-            required:true
-        },
-        status:{
-            type:String
-        },
-            
+  ],
+  deals: [
+    new mongoose.Schema({
+      requesterId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      requestorWanted: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Skill",
+        required: true,
+      }],
+      requestorOffers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Skill",
+        required: true,
+      }],
+      status: {
+        type: String,
+        enum: ["pending", "accepted", "rejected"],
+        default: "pending",
+      },
+    }, { _id: true, timestamps: true }) 
+  ],
+}, { timestamps: true });
 
-    },{timestamps:true}]
-
-
-})
-
-export default mongoose.model('Advert', advertSchema);
+export default mongoose.model("Advert", advertSchema);
