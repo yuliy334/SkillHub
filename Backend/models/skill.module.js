@@ -2,18 +2,19 @@ import mongoose from "mongoose";
 import { object, string } from "zod";
 import { required } from "zod/mini";
 
-const tag = object.freeze({
-    since: 'since',
-    language: 'language',
-    art: 'art',
-    music:'music',
-    sport:'sport',
-    DIY:'DIY',
-    lifestyle:'lifestyle',
-    gaming:'gaming',
-    technologies:'technologies',
-    social:'social'
-})
+const TAGS = [
+  'since',
+  'language',
+  'art',
+  'music',
+  'sport',
+  'DIY',
+  'lifestyle',
+  'gaming',
+  'technologies',
+  'social'
+];
+
 
 const skillSchema = new mongoose.Schema({
     name:{
@@ -21,8 +22,9 @@ const skillSchema = new mongoose.Schema({
         required:true
     },
     category:{
-        type:tag,
-        required:false
+        type: String,
+        enum: TAGS,
+        required: false
     }
 })
 
