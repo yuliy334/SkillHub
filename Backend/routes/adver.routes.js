@@ -1,13 +1,23 @@
 import express from "express";
 import { protect } from "../middleware/middleware.auth.js";
-import { addAdvert, deleteAdvert, updateAdvertSkills } from "../controllers/advert.controller.js";
-import {protectAdvert} from "../middleware/middleware.IsAdvertOwner.js";
+import {
+  addAdvert,
+  addDeal,
+  deleteAdvert,
+  getMyAdverts,
+  updateAdvertSkills,
+  getAllAdverts,
+} from "../controllers/advert.controller.js";
+import { protectAdvert } from "../middleware/middleware.IsAdvertOwner.js";
+import { get } from "http";
 
 const adverRouter = express.Router();
 
+adverRouter.get("/myAdverts", protect, getMyAdverts);
+adverRouter.get("/", protect, getAllAdverts);
 adverRouter.post("/", protect, addAdvert);
 adverRouter.delete("/:advertId", protect, protectAdvert, deleteAdvert);
 adverRouter.patch("/:advertId", protect, protectAdvert, updateAdvertSkills);
-
+adverRouter.post("/:advertId/deals", protect, addDeal);
 
 export default adverRouter;
