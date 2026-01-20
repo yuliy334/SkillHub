@@ -10,7 +10,9 @@ import {
 } from "../controllers/advert.controller.js";
 import { protectAdvert } from "../middleware/middleware.IsAdvertOwner.js";
 import { protectDeal } from "../middleware/middleware.isDealOwner.js";
-import { get } from "http";
+import { deleteDeal } from "../controllers/advert.controller.js";
+import { acceptDeal } from "../controllers/advert.controller.js";
+import { rejectDeal } from "../controllers/advert.controller.js";
 
 const adverRouter = express.Router();
 
@@ -22,5 +24,8 @@ adverRouter.patch("/:advertId", protect, protectAdvert, updateAdvertSkills);
 
 adverRouter.post("/:advertId/deals", protect, addDeal);
 adverRouter.delete("/:advertId/deals/:dealId", protect, protectDeal, deleteDeal);
+
+adverRouter.patch("/:advertId/deals/:dealId/accept", protect, protectAdvert, acceptDeal);
+adverRouter.patch("/:advertId/deals/:dealId/reject", protect, protectAdvert, rejectDeal);
 
 export default adverRouter;

@@ -22,7 +22,7 @@ export const addAdvert = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error creating advert", error: error.message });
+      .json({ message: "Error creating advert"});
   }
 };
 
@@ -36,7 +36,7 @@ export const deleteAdvert = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error deleting advert", error: error.message });
+      .json({ message: "Error deleting advert"});
   }
 };
 
@@ -59,13 +59,13 @@ export const updateAdvertSkills = async (req, res) => {
 
     res.status(200).json({ updatedAdvert, message: "advert skill updated" });
   } catch (error) {
-    res.status(500).json({ message: "Update failed", error: error.message });
+    res.status(500).json({ message: "Update failed"});
   }
 };
 
 export const addDeal = async (req, res) => {
   const { advertId } = req.params;
-  const { requestorWanted, requestorOffers } = req.body;
+  const { requestorWanted, requestorOffers, scheduleSlotId } = req.body;
   const requesterId = req.user.id;
 
   try {
@@ -73,10 +73,17 @@ export const addDeal = async (req, res) => {
     if (!advert) {
       return res.status(404).json({ message: "Advert not found" });
     }
+    if (advert.userId.toString() === requesterId) {
+      return res
+        .status(400)
+        .json({ message: "Cannot create a deal on your own advert" });
+    }
+
     const newDeal = {
       requesterId,
       requestorWanted,
       requestorOffers,
+      scheduleSlotId,
       status: "pending",
     };
     advert.deals.push(newDeal);
@@ -87,7 +94,7 @@ export const addDeal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error adding deal", error: error.message });
+      .json({ message: "Error adding deal"});
   }
 };
 
@@ -99,7 +106,7 @@ export const getMyAdverts = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error fetching adverts", error: error.message });
+      .json({ message: "Error fetching adverts" });
   }
 };
 export const getAllAdverts = async (req, res) => {
@@ -117,7 +124,6 @@ export const getAllAdverts = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Error fetching adverts",
-      error: error.message,
     });
   }
 };
@@ -132,12 +138,55 @@ export const deleteDeal = async (req, res) => {
     if (!deal) {
       return res.status(404).json({ message: "Deal not found" });
     }
-    deal.remove();
+    advert.deals.pull(dealId);
     await advert.save();
     return res.status(200).json({ message: "Deal deleted successfully" });
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error deleting deal", error: error.message });
+      .json({ message: "Error deleting deal" });
+  }
+};
+export const acceptDeal = async (req, res) => {
+  try {
+    const { advertId, dealId } = req.params;
+    const advert = await Advert.findById(advertId);
+    if (!advert) {
+      return res.status(404).json({ message: "Advert not found" });
+    }
+    const deal = advert.deals.id(dealId);
+
+    if (!deal) {
+      return res.status(404).json({ message: "Deal not found" });
+    }
+    deal.status = "accepted";
+    await advert.save();
+    return res.status(200).json({ message: "Deal accepted successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error accepting deal" });
+  }
+};
+
+export const rejectDeal = async (req, res) => {
+  try {
+    const { advertId, dealId } = req.params;
+    const advert = await Advert.findById(advertId);
+    if (!advert) {
+      return res.status(404).json({ message: "Advert not found" });
+    }
+    const deal = advert.deals.id(dealId);
+
+    if (!deal) {
+      return res.status(404).json({ message: "Deal not found" });
+    }
+    deal.status = "rejected";
+    await advert.save();
+    return res.status(200).json({ message: "Deal rejected successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error rejecting deal"});
   }
 };

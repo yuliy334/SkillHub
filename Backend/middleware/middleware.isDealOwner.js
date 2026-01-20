@@ -13,7 +13,7 @@ export const protectDeal = async (req, res, next) => {
         return res.status(404).json({ message: "Deal not found" });
       }
 
-      if (!deal.userId.equals(req.user._id)) {
+      if (!deal.requesterId.equals(req.user._id)) {
         return res
           .status(403)
           .json({ message: "Permission denied: Not your deal" });
