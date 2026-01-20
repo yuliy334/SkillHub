@@ -105,19 +105,39 @@ export const getMyAdverts = async (req, res) => {
 export const getAllAdverts = async (req, res) => {
   try {
     const adverts = await Advert.find()
-      .select('-deals')
+      .select("-deals")
       .populate({
-        path: 'userId',
-        select: 'name lastName',
+        path: "userId",
+        select: "name lastName",
       })
-      .populate('userWanted userOffers', 'name')
+      .populate("userWanted userOffers", "name")
       .lean();
 
     return res.status(200).json({ adverts });
   } catch (error) {
-    return res.status(500).json({ 
-      message: "Error fetching adverts", 
-      error: error.message 
+    return res.status(500).json({
+      message: "Error fetching adverts",
+      error: error.message,
     });
+  }
+};
+export const deleteDeal = async (req, res) => {
+  try {
+    const { advertId, dealId } = req.params;
+    const advert = await Advert.findById(advertId);
+    if (!advert) {
+      return res.status(404).json({ message: "Advert not found" });
+    }
+    const deal = advert.deals.id(dealId);
+    if (!deal) {
+      return res.status(404).json({ message: "Deal not found" });
+    }
+    deal.remove();
+    await advert.save();
+    return res.status(200).json({ message: "Deal deleted successfully" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error deleting deal", error: error.message });
   }
 };
