@@ -1,4 +1,5 @@
 import Advert from "../models/advert.module.js";
+import User from "../models/user.module.js";
 
 export const addAdvert = async (req, res) => {
   try {
@@ -20,9 +21,7 @@ export const addAdvert = async (req, res) => {
       .status(201)
       .json({ newAdvert: savedAdvert, message: "advert created" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error creating advert"});
+    return res.status(500).json({ message: "Error creating advert" });
   }
 };
 
@@ -34,9 +33,7 @@ export const deleteAdvert = async (req, res) => {
 
     return res.status(201).json({ message: "advert deleted" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error deleting advert"});
+    return res.status(500).json({ message: "Error deleting advert" });
   }
 };
 
@@ -59,7 +56,7 @@ export const updateAdvertSkills = async (req, res) => {
 
     res.status(200).json({ updatedAdvert, message: "advert skill updated" });
   } catch (error) {
-    res.status(500).json({ message: "Update failed"});
+    res.status(500).json({ message: "Update failed" });
   }
 };
 
@@ -78,12 +75,21 @@ export const addDeal = async (req, res) => {
         .status(400)
         .json({ message: "Cannot create a deal on your own advert" });
     }
-
+    const advertOwner = await User.findById(advert.userId);
+    const slot = advertOwner.schedule.id(scheduleSlotId);
+    if (!slot) {
+      return res
+        .status(404)
+        .json({ message: "Schedule slot not found in your profile" });
+    }
+    console.log(slot.start, slot.end);
     const newDeal = {
       requesterId,
       requestorWanted,
       requestorOffers,
       scheduleSlotId,
+      startTime: slot.start,
+      endTime: slot.end,
       status: "pending",
     };
     advert.deals.push(newDeal);
@@ -94,19 +100,28 @@ export const addDeal = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error adding deal"});
+      .json({ message: "Error adding deal", error: error.message });
   }
 };
 
 export const getMyAdverts = async (req, res) => {
   try {
     const userId = req.user.id;
-    const adverts = await Advert.find({ userId });
+    const adverts = await Advert.find({ userId })
+      .populate({
+        path: "deals",
+        populate: [
+          { path: "requestorWanted", select: "name" },
+          { path: "requestorOffers", select: "name" },
+          { path: "requesterId", select: "name" },
+        ],
+      })
+      .populate("userWanted", "name")
+      .populate("userOffers", "name")
+      .lean();
     return res.status(200).json({ adverts });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error fetching adverts" });
+    return res.status(500).json({ message: "Error fetching adverts" });
   }
 };
 export const getAllAdverts = async (req, res) => {
@@ -142,9 +157,7 @@ export const deleteDeal = async (req, res) => {
     await advert.save();
     return res.status(200).json({ message: "Deal deleted successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error deleting deal" });
+    return res.status(500).json({ message: "Error deleting deal" });
   }
 };
 export const acceptDeal = async (req, res) => {
@@ -163,9 +176,7 @@ export const acceptDeal = async (req, res) => {
     await advert.save();
     return res.status(200).json({ message: "Deal accepted successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error accepting deal" });
+    return res.status(500).json({ message: "Error accepting deal" });
   }
 };
 
@@ -185,8 +196,6 @@ export const rejectDeal = async (req, res) => {
     await advert.save();
     return res.status(200).json({ message: "Deal rejected successfully" });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error rejecting deal"});
+    return res.status(500).json({ message: "Error rejecting deal" });
   }
 };
