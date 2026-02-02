@@ -106,3 +106,20 @@ export const refresh = async (req, res) => {
     res.status(403).json("Invalid Refresh Token");
   }
 };
+export const logout = async (req, res) => {
+  try {
+    const cookieOptions = {
+      httpOnly: true,
+    };
+
+    res.clearCookie("accessToken", cookieOptions);
+    res.clearCookie("refreshToken", cookieOptions);
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    return res.status(500).json("Error during logout");
+  }
+};
