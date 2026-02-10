@@ -1,0 +1,96 @@
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+.login-card h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  background: linear-gradient(to right, #61dafb, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #94a3b8;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  margin-left: 5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Чтобы padding не раздувал input */
+}
+
+.input-group input:focus {
+  border-color: #61dafb;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(97, 218, 251, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background: #61dafb;
+  border: none;
+  border-radius: 15px;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(97, 218, 251, 0.4);
+  background: #ffffff;
+}
+
+.footer-text {
+  margin-top: 25px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.link {
+  color: #61dafb;
+  cursor: pointer;
+  font-weight: 600;
+}
