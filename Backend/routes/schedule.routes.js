@@ -1,5 +1,4 @@
 import express from "express";
-// import { getAll } from "../controllers/schedule.controller.js";
 import { protect } from "../middleware/middleware.auth.js";
 import { addSchedule, deleteSchedule, getAllSchedule, updateSchedule } from "../controllers/schedule.controller.js";
 

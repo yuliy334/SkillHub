@@ -1,5 +1,6 @@
 import express from "express";
 import { protect } from "../middleware/middleware.auth.js";
+import { verifyToken } from "../middleware/middleware.verifyJwt.js";
 import {
   addAdvert,
   addDeal,
@@ -15,17 +16,17 @@ import { acceptDeal } from "../controllers/advert.controller.js";
 import { rejectDeal } from "../controllers/advert.controller.js";
 
 const adverRouter = express.Router();
+addAdvert.use(verifyToken);
 
-adverRouter.get("/myAdverts", protect, getMyAdverts);
-adverRouter.get("/", protect, getAllAdverts);
-adverRouter.post("/", protect, addAdvert);
-adverRouter.delete("/:advertId", protect, protectAdvert, deleteAdvert);
-adverRouter.patch("/:advertId", protect, protectAdvert, updateAdvertSkills);
+adverRouter.get("/myAdverts", getMyAdverts);
+adverRouter.get("/", getAllAdverts);
+adverRouter.post("/", addAdvert);
+adverRouter.delete("/:advertId", protectAdvert, deleteAdvert);
+adverRouter.patch("/:advertId", protectAdvert, updateAdvertSkills);
 
-adverRouter.post("/:advertId/deals", protect, addDeal);
-adverRouter.delete("/:advertId/deals/:dealId", protect, protectDeal, deleteDeal);
+adverRouter.post("/:advertId/deals", addDeal);
+adverRouter.delete("/:advertId/deals/:dealId", protectDeal, deleteDeal);
 
-adverRouter.patch("/:advertId/deals/:dealId/accept", protect, protectAdvert, acceptDeal);
-adverRouter.patch("/:advertId/deals/:dealId/reject", protect, protectAdvert, rejectDeal);
-
+adverRouter.patch("/:advertId/deals/:dealId/accept", protectAdvert, acceptDeal);
+adverRouter.patch("/:advertId/deals/:dealId/reject", protectAdvert, rejectDeal);
 export default adverRouter;

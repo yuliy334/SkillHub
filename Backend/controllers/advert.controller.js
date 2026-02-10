@@ -82,7 +82,6 @@ export const addDeal = async (req, res) => {
         .status(404)
         .json({ message: "Schedule slot not found in your profile" });
     }
-    console.log(slot.start, slot.end);
     const newDeal = {
       requesterId,
       requestorWanted,
@@ -118,7 +117,7 @@ export const getMyAdverts = async (req, res) => {
       })
       .populate("userWanted", "name")
       .populate("userOffers", "name")
-      .lean();
+      .lean();// с монгуса на джаез
     return res.status(200).json({ adverts });
   } catch (error) {
     return res.status(500).json({ message: "Error fetching adverts" });
