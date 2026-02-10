@@ -6,8 +6,8 @@ import './NavStyle.css';
 const Navbar = () => {
   const links = [
     { path: '/', label: 'Home' },
-    { path: '/register', label: 'Sign Up' },
-    { path: '/cards', label: 'Cards' }
+    { path: '/cards', label: 'Cards' },
+    { path: '/auth', label: 'Log In' }
   ];
 
   return (
