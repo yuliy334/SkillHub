@@ -80,9 +80,14 @@ export const login = async (req, res) => {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
-  return res
-    .status(200)
-    .json({ success: true, account: { name: check.name, email: check.email } });
+  return res.status(200).json({
+    success: true,
+    account: {
+      name: check.name,
+      lastName: check.lastName,
+      email: check.email,
+    },
+  });
 };
 
 export const refresh = async (req, res) => {
@@ -95,7 +100,7 @@ export const refresh = async (req, res) => {
     const newAccessToken = jwt.sign(
       { id: verified.id, email: verified.email },
       ACCESS_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "15m" },
     );
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
@@ -122,4 +127,11 @@ export const logout = async (req, res) => {
   } catch (error) {
     return res.status(500).json("Error during logout");
   }
+};
+export const me = async (req, res) => {
+  return res.status(200).json({
+    name: req.user.name,
+    lastName: req.user.lastName,
+    email: req.user.email,
+  });
 };

@@ -16,7 +16,7 @@ import { acceptDeal } from "../controllers/advert.controller.js";
 import { rejectDeal } from "../controllers/advert.controller.js";
 
 const adverRouter = express.Router();
-addAdvert.use(verifyToken);
+adverRouter.use(verifyToken);
 
 adverRouter.get("/myAdverts", getMyAdverts);
 adverRouter.get("/", getAllAdverts);

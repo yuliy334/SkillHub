@@ -1,43 +1,109 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import './NavStyle.css';
+import React, { useState, useRef, useEffect } from "react";
+import { NavLink, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useUser } from "../../hooks/useUserStore";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import PersonIcon from "@mui/icons-material/Person";
+import { useLogout } from "../../hooks/useAuth";
+import "./NavStyle.css";
 
 const Navbar = () => {
-  const links = [
-    { path: '/', label: 'Home' },
-    { path: '/auth', label: 'Log In' }
-  ];
+  const { data: user } = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  const { mutate: logOutMutate } = useLogout();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const links = [{ path: "/", label: "Home" }];
 
   return (
     <nav className="navbar-container">
       <div className="logo">SkillHub</div>
+
       <ul className="nav-links">
         {links.map((link) => (
           <li key={link.path}>
             <NavLink to={link.path} className="nav-item">
               {({ isActive }) => (
                 <>
-                  <span className={`nav-text ${isActive ? 'active' : ''}`}>
+                  <span className={`nav-text ${isActive ? "active" : ""}`}>
                     {link.label}
                   </span>
-                  
                   {isActive && (
-                    <motion.div
-                      layoutId="bubble"
-                      className="nav-active-bg"
-                      transition={{ 
-                        type: 'spring', 
-                        bounce: 0.2, 
-                        duration: 0.6 
-                      }}
-                    />
+                    <motion.div layoutId="bubble" className="nav-active-bg" />
                   )}
                 </>
               )}
             </NavLink>
           </li>
         ))}
+
+        {!user ? (
+          <li>
+            <NavLink to="/auth" className="nav-item">
+              {({ isActive }) => (
+                <>
+                  <span className={`nav-text ${isActive ? "active" : ""}`}>
+                    Log In
+                  </span>
+                  {isActive && (
+                    <motion.div layoutId="bubble" className="nav-active-bg" />
+                  )}
+                </>
+              )}
+            </NavLink>
+          </li>
+        ) : (
+          <li className="user-menu-container" ref={menuRef}>
+            <div
+              className="user-profile-trigger"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <AccountCircleIcon sx={{ color: "white" }} />
+              <span className="nav-text active">
+                {user.username || user.name}
+              </span>
+            </div>
+
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  className="dropdown-menu"
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                >
+                  <Link
+                    to="/profile"
+                    className="dropdown-item"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <PersonIcon fontSize="small" />
+                    my account
+                  </Link>
+                  <button
+                    className="dropdown-item logout"
+                    onClick={logOutMutate}
+                  >
+                    <LogoutIcon fontSize="small" />
+                    log out
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </li>
+        )}
       </ul>
     </nav>
   );
