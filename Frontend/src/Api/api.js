@@ -1,37 +1,55 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
 });
 
+let refreshPromise = null;
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (originalRequest.url.includes('/auth/login', '/auth/register')) {
-       return Promise.reject(error);
+    const isAuthRequest =
+      originalRequest?.url?.includes("/auth/login") ||
+      originalRequest?.url?.includes("/auth/register");
+    if (isAuthRequest) {
+      return Promise.reject(error);
     }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (originalRequest.url.includes('/auth/refresh')) {
+      const isRefreshRequest = originalRequest?.url?.includes("/auth/refresh");
+      if (isRefreshRequest) {
         localStorage.removeItem("user_profile");
-        window.location.href = "/auth"; 
+        window.location.href = "/auth";
         return Promise.reject(error);
       }
-      
+
       originalRequest._retry = true;
 
-      try {
-        await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/refresh`, {}, { 
-          withCredentials: true 
-        });
+      if (!refreshPromise) {
+        refreshPromise = axios
+          .post(
+            `${import.meta.env.VITE_BASE_URL}/auth/refresh`,
+            {},
+            { withCredentials: true }
+          )
+          .finally(() => {
+            refreshPromise = null;
+          });
+      }
 
+      try {
+        await refreshPromise;
         return api(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem("user_profile"); 
-        window.location.href = '/auth';
+        const isSessionInvalid = refreshError.response?.status === 401;
+        if (isSessionInvalid) {
+          localStorage.removeItem("user_profile");
+          window.location.href = "/auth";
+        }
         return Promise.reject(refreshError);
       }
     }
