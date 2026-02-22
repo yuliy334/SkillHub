@@ -9,6 +9,7 @@ import { useLogout } from "../../hooks/useAuth";
 import "./NavStyle.css";
 
 const Navbar = () => {
+<<<<<<< HEAD
   const { data: user } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -26,6 +27,13 @@ const Navbar = () => {
   }, []);
 
   const links = [{ path: "/", label: "Home" }];
+=======
+  const links = [
+    { path: '/', label: 'Home' },
+    { path: '/cards', label: 'Cards' },
+    { path: '/auth', label: 'Log In' }
+  ];
+>>>>>>> 01a0cab517fe30188894c8bfb0e37db842d2979c
 
   return (
     <nav className="navbar-container">

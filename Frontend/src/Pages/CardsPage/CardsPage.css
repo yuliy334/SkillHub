@@ -1,0 +1,19 @@
+
+.main-container{
+    
+    background-color: rgb(36, 96, 165);
+    width: 100%;
+    padding: 32px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+.cards-container{
+    width: 75%;
+    border-radius: 10px;  
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.137);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    
+    gap: 20px;
+}
