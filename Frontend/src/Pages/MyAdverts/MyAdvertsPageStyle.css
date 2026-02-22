@@ -1,0 +1,208 @@
+.myadverts-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+}
+
+.myadverts-loading {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.myadverts-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.myadverts-card h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(to right, #61dafb, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.myadverts-subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+.myadverts-section {
+  margin-bottom: 40px;
+}
+
+.myadverts-section:last-child {
+  margin-bottom: 0;
+}
+
+.myadverts-section h2 {
+  font-size: 1.2rem;
+  color: #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.myadverts-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.skills-loading,
+.skills-empty {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.skills-column h3 {
+  font-size: 1rem;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.skills-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skill-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.skill-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: #61dafb;
+  cursor: pointer;
+}
+
+.myadverts-button {
+  padding: 12px 24px;
+  background: #61dafb;
+  border: none;
+  border-radius: 12px;
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.myadverts-button:hover:not(:disabled) {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.myadverts-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adverts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.adverts-empty {
+  color: #64748b;
+  font-size: 0.95rem;
+  padding: 24px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.advert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.advert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.advert-skills {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.advert-label {
+  color: #61dafb;
+  font-weight: 600;
+}
+
+.advert-deals {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.advert-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-left: 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #fca5a5;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.advert-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+@media (max-width: 600px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}

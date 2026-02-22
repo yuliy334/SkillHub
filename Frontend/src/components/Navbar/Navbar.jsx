@@ -5,6 +5,7 @@ import { useUser } from "../../hooks/useUserStore";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import { useLogout } from "../../hooks/useAuth";
 import "./NavStyle.css";
 
@@ -25,7 +26,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const links = [{ path: "/", label: "Home" }];
+  const links = user
+    ? [
+        { path: "/", label: "Home" },
+        { path: "/my-adverts", label: "My Adverts" },
+      ]
+    : [{ path: "/", label: "Home" }];
 
   return (
     <nav className="navbar-container">
@@ -91,6 +97,14 @@ const Navbar = () => {
                   >
                     <PersonIcon fontSize="small" />
                     my account
+                  </Link>
+                  <Link
+                    to="/my-adverts"
+                    className="dropdown-item"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <AssignmentIcon fontSize="small" />
+                    my adverts
                   </Link>
                   <button
                     className="dropdown-item logout"
