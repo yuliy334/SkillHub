@@ -2,10 +2,13 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { register, logIn, logOut, refresh } from "../Api/auth/auth.api";
 
 export const useRegister = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (userData) => register(userData),
     onSuccess: (data) => {
-      console.log("Registered successfully", data);
+      localStorage.setItem("user_profile", JSON.stringify(data.account));
+      queryClient.setQueryData(["user"], data.account);
     },
   });
 };
@@ -18,7 +21,6 @@ export const useLogin = () => {
     onSuccess: (userData) => {
       localStorage.setItem("user_profile", JSON.stringify(userData.account));
       queryClient.setQueryData(["user"], userData.account);
-        
     },
     onError: (error) => {
       console.error("Login failed:", error);
@@ -35,9 +37,9 @@ export const useLogout = () => {
       localStorage.removeItem("user_profile");
 
       queryClient.setQueryData(["user"], null);
-      
+
       queryClient.clear();
-      
+
       console.log("Logged out successfully");
     },
   });

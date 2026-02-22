@@ -16,6 +16,7 @@ const generateTokens = (payload) => {
 export const register = async (req, res) => {
   const { success, error } = validateRegister(req.body);
   if (!success) {
+    console.log("Validation Error Details:", error.issues);
     return res.status(400).json(error.issues[0].message);
   }
   const { name, lastName, email, password } = req.body;

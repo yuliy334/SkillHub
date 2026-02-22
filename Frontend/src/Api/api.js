@@ -10,8 +10,12 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    if (originalRequest.url.includes('/auth/login', '/auth/register')) {
+       return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
-      if (error.config.url.includes('/auth/refresh')) {
+      if (originalRequest.url.includes('/auth/refresh')) {
         localStorage.removeItem("user_profile");
         window.location.href = "/auth"; 
         return Promise.reject(error);
@@ -26,7 +30,8 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (refreshError) {
-        window.location.href = '/login';
+        localStorage.removeItem("user_profile"); 
+        window.location.href = '/auth';
         return Promise.reject(refreshError);
       }
     }
