@@ -1,6 +1,5 @@
 import express from "express";
 import { protect } from "../middleware/middleware.auth.js";
-import { verifyToken } from "../middleware/middleware.verifyJwt.js";
 import {
   addAdvert,
   addDeal,
@@ -16,7 +15,7 @@ import { acceptDeal } from "../controllers/advert.controller.js";
 import { rejectDeal } from "../controllers/advert.controller.js";
 
 const adverRouter = express.Router();
-adverRouter.use(verifyToken);
+adverRouter.use(protect);
 
 adverRouter.get("/myAdverts", getMyAdverts);
 adverRouter.get("/", getAllAdverts);

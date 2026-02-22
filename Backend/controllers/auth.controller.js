@@ -40,12 +40,16 @@ export const register = async (req, res) => {
 
   const tokens = generateTokens({ id: user._id, email: user.email });
 
-  res.cookie("accessToken", tokens.accessToken, {
+  const cookieOptions = {
     httpOnly: true,
+    sameSite: "lax",
+  };
+  res.cookie("accessToken", tokens.accessToken, {
+    ...cookieOptions,
     maxAge: 15 * 60 * 1000,
   });
   res.cookie("refreshToken", tokens.refreshToken, {
-    httpOnly: true,
+    ...cookieOptions,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
@@ -73,12 +77,16 @@ export const login = async (req, res) => {
   }
   const tokens = generateTokens({ id: check._id, email: check.email });
 
-  res.cookie("accessToken", tokens.accessToken, {
+  const cookieOptions = {
     httpOnly: true,
+    sameSite: "lax",
+  };
+  res.cookie("accessToken", tokens.accessToken, {
+    ...cookieOptions,
     maxAge: 15 * 60 * 1000,
   });
   res.cookie("refreshToken", tokens.refreshToken, {
-    httpOnly: true,
+    ...cookieOptions,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   return res.status(200).json({
@@ -106,6 +114,7 @@ export const refresh = async (req, res) => {
     );
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
+      sameSite: "lax",
       maxAge: 15 * 60 * 1000,
     });
     res.status(200).json("refresh succes");
