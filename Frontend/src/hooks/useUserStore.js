@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import { fetchCurrentUser } from "../Api/auth/auth.api";
 
 export const useUser = () => {
@@ -6,8 +6,12 @@ export const useUser = () => {
 
   return useQuery({
     queryKey: ["user"],
-    queryFn: fetchCurrentUser,
-    enabled: !!savedUser, 
+    queryFn: async () => {
+      const data = await fetchCurrentUser();
+      localStorage.setItem("user_profile", JSON.stringify(data));
+      return data;
+    },
+    enabled: !!savedUser,
     initialData: () => {
       return savedUser ? JSON.parse(savedUser) : undefined;
     },

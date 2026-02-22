@@ -52,7 +52,7 @@ export const register = async (req, res) => {
   return res.status(201).json({
     success: true,
     message: "user created",
-    account: { name, lastName, email },
+    account: { name, lastName, email, aboutMe: user.aboutMe ?? null },
   });
 };
 
@@ -87,6 +87,7 @@ export const login = async (req, res) => {
       name: check.name,
       lastName: check.lastName,
       email: check.email,
+      aboutMe: check.aboutMe ?? null,
     },
   });
 };
