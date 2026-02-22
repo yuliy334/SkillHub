@@ -1,0 +1,223 @@
+.account-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+}
+
+.account-loading {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.account-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.account-card h1 {
+  font-size: 2rem;
+  margin-bottom: 32px;
+  background: linear-gradient(to right, #61dafb, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.account-section {
+  margin-bottom: 40px;
+}
+
+.account-section:last-child {
+  margin-bottom: 0;
+}
+
+.account-section h2 {
+  font-size: 1.2rem;
+  color: #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.account-form,
+.schedule-form {
+  margin-top: 20px;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.input-group.readonly input {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.input-group label {
+  display: block;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #61dafb;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.account-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.account-button {
+  padding: 12px 24px;
+  background: #61dafb;
+  border: none;
+  border-radius: 12px;
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.account-button:hover:not(:disabled) {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.account-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.schedule-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.schedule-add-btn {
+  align-self: flex-start;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-empty {
+  color: #64748b;
+  font-size: 0.95rem;
+  padding: 20px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.schedule-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.schedule-arrow {
+  color: #61dafb;
+  font-weight: 600;
+}
+
+.schedule-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #fca5a5;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.schedule-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+@media (max-width: 560px) {
+  .input-row,
+  .schedule-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-item-info {
+    flex-wrap: wrap;
+  }
+}

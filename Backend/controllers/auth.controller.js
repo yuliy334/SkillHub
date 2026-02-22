@@ -134,5 +134,6 @@ export const me = async (req, res) => {
     name: req.user.name,
     lastName: req.user.lastName,
     email: req.user.email,
+    aboutMe: req.user.aboutMe ?? null,
   });
 };
