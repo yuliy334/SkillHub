@@ -6,7 +6,7 @@
   padding: 40px 20px;
 }
 
-.alladverts-loading {
+.alladverts-loading { 
   color: #94a3b8;
   font-size: 1.1rem;
 }
@@ -83,55 +83,4 @@
   text-align: center;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
-}
-
-.alladvert-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-}
-
-.alladvert-main {
-  flex: 1;
-  min-width: 0;
-}
-
-.alladvert-offer-btn {
-  padding: 10px 18px;
-  background: rgba(97, 218, 251, 0.2);
-  border: 1px solid rgba(97, 218, 251, 0.4);
-  border-radius: 10px;
-  color: #61dafb;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-
-.alladvert-offer-btn:hover {
-  background: rgba(97, 218, 251, 0.3);
-}
-
-.alladvert-author {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #61dafb;
-  margin-bottom: 12px;
-}
-
-.alladvert-skills {
-  color: #e2e8f0;
-  font-size: 0.9rem;
-  line-height: 1.6;
-}
-
-.alladvert-label {
-  color: #94a3b8;
-  font-weight: 600;
 }

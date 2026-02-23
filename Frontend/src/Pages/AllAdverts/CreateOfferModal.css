@@ -1,3 +1,4 @@
+/* --- Основные стили модального окна --- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -7,6 +8,7 @@
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
@@ -36,14 +38,13 @@
 
 .modal-close {
   display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 8px;
   background: none;
   border: none;
   color: #94a3b8;
   cursor: pointer;
   border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .modal-close:hover {
@@ -51,15 +52,16 @@
   color: #fff;
 }
 
+/* --- Состояния и формы --- */
+.modal-form {
+  padding: 24px;
+}
+
 .modal-loading,
 .modal-error {
   padding: 40px;
   text-align: center;
   color: #94a3b8;
-}
-
-.modal-form {
-  padding: 24px;
 }
 
 .modal-form-error {
@@ -95,41 +97,104 @@
   padding: 16px;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 12px;
+  text-align: center;
 }
 
-.schedule-slots {
+/* --- Секция Календаря (Слоты) --- */
+.calendar-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 24px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calendar-date-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-date-badge::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.calendar-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 8px;
 }
 
-.schedule-slot-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* Карточка слота */
+.time-slot-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: #e2e8f0;
-  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.schedule-slot-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+.time-slot-card input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.schedule-slot-option.selected {
-  border-color: #61dafb;
+.slot-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label-text {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.time-range {
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.time-slot-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(97, 218, 251, 0.3);
+}
+
+.time-slot-card.active {
   background: rgba(97, 218, 251, 0.1);
+  border-color: #61dafb;
+  box-shadow: inset 0 0 10px rgba(97, 218, 251, 0.05);
 }
 
-.schedule-slot-option input {
-  accent-color: #61dafb;
+.time-slot-card.active .time-range,
+.time-slot-card.active .label-text {
+  color: #61dafb;
 }
 
+/* --- Кнопки действий --- */
 .modal-actions {
   display: flex;
   gap: 12px;
@@ -145,12 +210,13 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: #94a3b8;
-  font-size: 0.95rem;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .modal-cancel:hover {
   background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .modal-submit {
@@ -160,15 +226,25 @@
   border-radius: 12px;
   color: #0f172a;
   font-weight: 600;
-  font-size: 0.95rem;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .modal-submit:hover:not(:disabled) {
   background: #ffffff;
+  transform: translateY(-1px);
 }
 
 .modal-submit:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Скроллбар */
+.calendar-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+.calendar-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }

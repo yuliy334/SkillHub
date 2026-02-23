@@ -25,12 +25,13 @@ const CreateOfferModal = ({ advertId, onClose }) => {
   const fullSchedule = advert?.userId?.schedule || [];
   const acceptedSlotIds = new Set((advert?.acceptedSlotIds || []).map(String));
   const ownerSchedule = fullSchedule.filter(
-    (slot) => !acceptedSlotIds.has(String(slot._id))
+    (slot) => !acceptedSlotIds.has(String(slot._id)),
   );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!requestorWanted.length || !requestorOffers.length || !scheduleSlotId) return;
+    if (!requestorWanted.length || !requestorOffers.length || !scheduleSlotId)
+      return;
     createDeal(
       {
         advertId,
@@ -42,8 +43,25 @@ const CreateOfferModal = ({ advertId, onClose }) => {
       },
       {
         onSuccess: () => onClose(),
-      }
+      },
     );
+  };
+
+  const groupedSlots = ownerSchedule.reduce((acc, slot) => {
+    const dateKey = new Date(slot.start).toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+    });
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(slot);
+    return acc;
+  }, {});
+  const getTimeRange = (start, end) => {
+    const options = { hour: "2-digit", minute: "2-digit", hour12: false };
+    const s = new Date(start).toLocaleTimeString("en-US", options);
+    const e = new Date(end).toLocaleTimeString("en-US", options);
+    return `${s} — ${e}`;
   };
 
   return (
@@ -70,7 +88,9 @@ const CreateOfferModal = ({ advertId, onClose }) => {
 
             <div className="modal-section">
               <h3>What I want from them</h3>
-              <p className="modal-hint">Select from what {advert.userId?.name} offers</p>
+              <p className="modal-hint">
+                Select from what {advert.userId?.name} offers
+              </p>
               <SkillSelector
                 skills={ownerOffers}
                 selectedIds={requestorWanted}
@@ -81,7 +101,9 @@ const CreateOfferModal = ({ advertId, onClose }) => {
 
             <div className="modal-section">
               <h3>What I can offer them</h3>
-              <p className="modal-hint">Select from what {advert.userId?.name} wants</p>
+              <p className="modal-hint">
+                Select from what {advert.userId?.name} wants
+              </p>
               <SkillSelector
                 skills={ownerWants}
                 selectedIds={requestorOffers}
@@ -97,25 +119,41 @@ const CreateOfferModal = ({ advertId, onClose }) => {
                 <p className="modal-no-slots">No available time slots</p>
               ) : (
                 <div className="schedule-slots">
-                  {ownerSchedule.map((slot) => (
-                    <label
-                      key={slot._id}
-                      className={`schedule-slot-option ${
-                        scheduleSlotId === slot._id ? "selected" : ""
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="scheduleSlot"
-                        value={slot._id}
-                        checked={scheduleSlotId === slot._id}
-                        onChange={(e) => setScheduleSlotId(e.target.value)}
-                      />
-                      <span>
-                        {formatDateTime(slot.start)} — {formatDateTime(slot.end)}
-                      </span>
-                    </label>
-                  ))}
+                  {ownerSchedule.length === 0 ? (
+                    <p className="modal-no-slots">No available time slots</p>
+                  ) : (
+                    <div className="calendar-wrapper">
+                      {Object.entries(groupedSlots).map(([date, slots]) => (
+                        <div key={date} className="calendar-day">
+                          <div className="calendar-date-badge">{date}</div>
+                          <div className="calendar-slots-grid">
+                            {slots.map((slot) => (
+                              <label
+                                key={slot._id}
+                                className={`time-slot-card ${scheduleSlotId === slot._id ? "active" : ""}`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="scheduleSlot"
+                                  value={slot._id}
+                                  checked={scheduleSlotId === slot._id}
+                                  onChange={(e) =>
+                                    setScheduleSlotId(e.target.value)
+                                  }
+                                />
+                                <div className="slot-info">
+                                  <span className="label-text">Time:</span>
+                                  <span className="time-range">
+                                    {getTimeRange(slot.start, slot.end)}
+                                  </span>
+                                </div>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

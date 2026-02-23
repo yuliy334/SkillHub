@@ -1,0 +1,105 @@
+.alladvert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03); /* Чуть прозрачнее фон */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Эффект свечения при наведении на всю карточку */
+.alladvert-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-4px);
+  border-color: rgba(97, 218, 251, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.alladvert-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.alladvert-author {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #61dafb;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+}
+
+/* Маленькая точка-декор перед именем */
+.alladvert-author::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #61dafb;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 8px #61dafb;
+}
+
+.alladvert-skills {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alladvert-label {
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-right: 6px;
+  letter-spacing: 1px;
+}
+
+.alladvert-offer-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, rgba(97, 218, 251, 0.15), rgba(97, 218, 251, 0.05));
+  border: 1px solid rgba(97, 218, 251, 0.5);
+  border-radius: 12px;
+  color: #61dafb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.alladvert-offer-btn:hover {
+  background: #61dafb;
+  color: #1a1a1a; /* Текст становится темным на ярком фоне */
+  box-shadow: 0 0 20px rgba(97, 218, 251, 0.4);
+  transform: scale(1.05);
+}
+
+.alladvert-offer-btn:active {
+  transform: scale(0.98);
+}
+
+/* Адаптивность для мобилок */
+@media (max-width: 600px) {
+  .alladvert-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .alladvert-offer-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
