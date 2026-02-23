@@ -129,6 +129,8 @@
   cursor: pointer;
   width: 100%;
   text-align: left;
+  box-sizing: border-box;
+
 }
 
 .dropdown-item:hover {

@@ -22,7 +22,11 @@ const CreateOfferModal = ({ advertId, onClose }) => {
 
   const ownerOffers = advert?.userOffers || [];
   const ownerWants = advert?.userWanted || [];
-  const ownerSchedule = advert?.userId?.schedule || [];
+  const fullSchedule = advert?.userId?.schedule || [];
+  const acceptedSlotIds = new Set((advert?.acceptedSlotIds || []).map(String));
+  const ownerSchedule = fullSchedule.filter(
+    (slot) => !acceptedSlotIds.has(String(slot._id))
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();

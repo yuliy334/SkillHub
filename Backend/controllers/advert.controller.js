@@ -83,6 +83,15 @@ export const addDeal = async (req, res) => {
         .status(404)
         .json({ message: "Schedule slot not found in your profile" });
     }
+    const slotIdStr = scheduleSlotId.toString();
+    const hasAcceptedForSlot = (advert.deals || []).some(
+      (d) => d.status === "accepted" && d.scheduleSlotId?.toString() === slotIdStr
+    );
+    if (hasAcceptedForSlot) {
+      return res
+        .status(400)
+        .json({ message: "This time slot is already taken by an accepted offer on this advert" });
+    }
     const newDeal = {
       requesterId,
       requestorWanted,
@@ -193,7 +202,13 @@ export const getAdvertById = async (req, res) => {
       return res.status(404).json({ message: "Advert not found" });
     }
 
-    return res.status(200).json(advert);
+    const advertDeals = await Advert.findById(advertId).select("deals").lean();
+    const acceptedSlotIds = (advertDeals?.deals || [])
+      .filter((d) => d.status === "accepted")
+      .map((d) => d.scheduleSlotId?.toString())
+      .filter(Boolean);
+
+    return res.status(200).json({ ...advert, acceptedSlotIds });
   } catch (error) {
     return res.status(500).json({ message: "Error fetching advert" });
   }
