@@ -10,6 +10,11 @@ export const getMyAdverts = async () => {
   return res.data;
 };
 
+export const getAllAdverts = async () => {
+  const res = await api.get("/adverts");
+  return res.data;
+};
+
 export const deleteAdvert = async (advertId) => {
   const res = await api.delete(`/advert/${advertId}`);
   return res.data;

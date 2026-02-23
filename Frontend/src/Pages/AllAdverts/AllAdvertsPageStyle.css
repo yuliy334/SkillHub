@@ -1,0 +1,78 @@
+.alladverts-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+}
+
+.alladverts-loading {
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.alladverts-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.alladverts-card h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(to right, #61dafb, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.alladverts-subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+.alladverts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alladverts-empty {
+  color: #64748b;
+  font-size: 0.95rem;
+  padding: 24px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+}
+
+.alladvert-item {
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.alladvert-author {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #61dafb;
+  margin-bottom: 12px;
+}
+
+.alladvert-skills {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.alladvert-label {
+  color: #94a3b8;
+  font-weight: 600;
+}

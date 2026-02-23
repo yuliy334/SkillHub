@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAdvert,
   getMyAdverts,
+  getAllAdverts,
   deleteAdvert,
 } from "../Api/advert/advert.api";
 
@@ -22,6 +23,17 @@ export const useMyAdverts = (enabled = true) => {
     queryKey: ["myAdverts"],
     queryFn: async () => {
       const data = await getMyAdverts();
+      return data.adverts || [];
+    },
+    enabled,
+  });
+};
+
+export const useAllAdverts = (enabled = true) => {
+  return useQuery({
+    queryKey: ["adverts"],
+    queryFn: async () => {
+      const data = await getAllAdverts();
       return data.adverts || [];
     },
     enabled,

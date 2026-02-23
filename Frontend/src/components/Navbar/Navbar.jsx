@@ -28,9 +28,13 @@ const Navbar = () => {
 
   const links = user
     ? [
-        { path: "/", label: "Home" },,
+        { path: "/", label: "Home" },
+        { path: "/adverts", label: "Adverts" },
       ]
-    : [{ path: "/", label: "Home" }];
+    : [
+        { path: "/", label: "Home" },
+        { path: "/adverts", label: "Adverts" },
+      ];
 
   return (
     <nav className="navbar-container">
