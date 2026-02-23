@@ -1,0 +1,119 @@
+.myoffers-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(100vh - 100px);
+  padding: 40px 20px;
+}
+
+.myoffers-loading,
+.myoffers-empty {
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+.myoffers-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.myoffers-card h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  background: linear-gradient(to right, #61dafb, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.myoffers-subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+.myoffers-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.myoffers-item {
+  padding: 20px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.myoffers-item:last-child {
+  margin-bottom: 0;
+}
+
+.myoffers-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.myoffers-owner {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.myoffers-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.myoffers-status--pending {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.myoffers-status--accepted {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.myoffers-status--rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.myoffers-item-body p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #cbd5e1;
+}
+
+.myoffers-item-body strong {
+  color: #e2e8f0;
+}
+
+.myoffers-slot,
+.myoffers-contact {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.myoffers-email {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.myoffers-email:hover {
+  text-decoration: underline;
+}

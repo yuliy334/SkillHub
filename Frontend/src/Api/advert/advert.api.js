@@ -10,6 +10,11 @@ export const getMyAdverts = async () => {
   return res.data;
 };
 
+export const getMyDeals = async () => {
+  const res = await api.get("/advert/myDeals");
+  return res.data;
+};
+
 export const getAllAdverts = async () => {
   const res = await api.get("/adverts");
   return res.data;

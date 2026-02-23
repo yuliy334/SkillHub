@@ -1,5 +1,6 @@
 import Advert from "../models/advert.module.js";
 import User from "../models/user.module.js";
+import Skill from "../models/skill.module.js";
 
 export const addAdvert = async (req, res) => {
   try {
@@ -100,6 +101,59 @@ export const addDeal = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error adding deal", error: error.message });
+  }
+};
+
+export const getMyDeals = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const adverts = await Advert.find({ "deals.requesterId": userId })
+      .populate("userId", "name lastName email")
+      .populate("userWanted userOffers", "name")
+      .lean();
+
+    const myDeals = [];
+    for (const advert of adverts) {
+      const owner = advert.userId;
+      const myDealsInAdvert = (advert.deals || []).filter(
+        (d) => d.requesterId && d.requesterId.toString() === userId
+      );
+      for (const deal of myDealsInAdvert) {
+        myDeals.push({
+          deal: {
+            _id: deal._id,
+            status: deal.status,
+            startTime: deal.startTime,
+            endTime: deal.endTime,
+            requestorWanted: deal.requestorWanted,
+            requestorOffers: deal.requestorOffers,
+          },
+          advertId: advert._id,
+          advertSkills: {
+            offers: advert.userOffers || [],
+            wants: advert.userWanted || [],
+          },
+          owner: {
+            name: owner?.name,
+            lastName: owner?.lastName,
+            ...(deal.status === "accepted" && owner?.email && { email: owner.email }),
+          },
+        });
+      }
+    }
+
+    for (const item of myDeals) {
+      if (item.deal.requestorWanted?.length) {
+        item.deal.requestorWanted = await Skill.find({ _id: { $in: item.deal.requestorWanted } }).select("name").lean();
+      }
+      if (item.deal.requestorOffers?.length) {
+        item.deal.requestorOffers = await Skill.find({ _id: { $in: item.deal.requestorOffers } }).select("name").lean();
+      }
+    }
+
+    return res.status(200).json({ myDeals });
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching your deals" });
   }
 };
 

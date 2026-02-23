@@ -6,6 +6,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useLogout } from "../../hooks/useAuth";
 import "./NavStyle.css";
 
@@ -108,6 +109,14 @@ const Navbar = () => {
                   >
                     <AssignmentIcon fontSize="small" />
                     my adverts
+                  </Link>
+                  <Link
+                    to="/my-offers"
+                    className="dropdown-item"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <LocalOfferIcon fontSize="small" />
+                    my offers
                   </Link>
                   <button
                     className="dropdown-item logout"

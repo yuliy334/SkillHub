@@ -5,6 +5,7 @@ import {
   addDeal,
   deleteAdvert,
   getMyAdverts,
+  getMyDeals,
   getAdvertById,
   updateAdvertSkills,
   getAllAdverts,
@@ -19,6 +20,7 @@ const adverRouter = express.Router();
 adverRouter.use(protect);
 
 adverRouter.get("/myAdverts", getMyAdverts);
+adverRouter.get("/myDeals", getMyDeals);
 adverRouter.get("/", getAllAdverts);
 adverRouter.get("/:advertId", getAdvertById);
 adverRouter.post("/", addAdvert);

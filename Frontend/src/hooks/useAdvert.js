@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAdvert,
   getMyAdverts,
+  getMyDeals,
   getAllAdverts,
   getAdvertById,
   createDeal,
@@ -28,6 +29,17 @@ export const useMyAdverts = (enabled = true) => {
     queryFn: async () => {
       const data = await getMyAdverts();
       return data.adverts || [];
+    },
+    enabled,
+  });
+};
+
+export const useMyDeals = (enabled = true) => {
+  return useQuery({
+    queryKey: ["myDeals"],
+    queryFn: async () => {
+      const data = await getMyDeals();
+      return data.myDeals || [];
     },
     enabled,
   });
