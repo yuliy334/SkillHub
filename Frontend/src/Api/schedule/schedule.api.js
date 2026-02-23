@@ -14,3 +14,8 @@ export const deleteScheduleSlot = async (id) => {
   const res = await api.delete("/schedule", { data: { id } });
   return res.data;
 };
+
+export const updateScheduleSlot = async (id, start, end) => {
+  const res = await api.patch("/schedule", { id, start, end });
+  return res.data;
+};

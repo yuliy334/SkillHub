@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import { useUser } from "../../hooks/useUserStore";
 import { useUpdateUser } from "../../hooks/useUser";
 import {
   useSchedule,
   useAddScheduleSlot,
   useDeleteScheduleSlot,
+  useUpdateScheduleSlot,
 } from "../../hooks/useSchedule";
 import ScheduleItem from "./ScheduleItem";
 import "./AccountPageStyle.css";
@@ -13,38 +16,17 @@ import "./AccountPageStyle.css";
 const AccountPage = () => {
   const navigate = useNavigate();
   const { data: user, isLoading: userLoading } = useUser();
-  const {
-    mutate: updateUser,
-    isPending: isUpdating,
-    isError: updateError,
-  } = useUpdateUser();
-  const {
-    data: schedule = [],
-    isLoading: scheduleLoading,
-  } = useSchedule(!!user);
-  const {
-    mutate: addSlot,
-    isPending: isAdding,
-    isError: addSlotError,
-    error: addSlotErrorData,
-  } = useAddScheduleSlot();
+  const { mutate: updateUser, isPending: isUpdating } = useUpdateUser();
+  const { data: schedule = [], isLoading: scheduleLoading } = useSchedule(!!user);
+  const { mutate: addSlot, isPending: isAdding } = useAddScheduleSlot();
   const { mutate: deleteSlot } = useDeleteScheduleSlot();
-
-  const [profileForm, setProfileForm] = useState({
-    name: "",
-    lastName: "",
-    aboutMe: "",
-  });
-
-  const [scheduleForm, setScheduleForm] = useState({
-    start: "",
-    end: "",
-  });
+  const { mutate: updateSlot } = useUpdateScheduleSlot();
+  const [profileForm, setProfileForm] = useState({ name: "", lastName: "", aboutMe: "" });
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [timeForm, setTimeForm] = useState({ start: "09:00", end: "10:00" });
 
   useEffect(() => {
-    if (!userLoading && !user) {
-      navigate("/auth");
-    }
+    if (!userLoading && !user) navigate("/auth");
   }, [user, userLoading, navigate]);
 
   useEffect(() => {
@@ -57,164 +39,125 @@ const AccountPage = () => {
     }
   }, [user]);
 
-  const handleProfileChange = (e) => {
-    const { name, value } = e.target;
-    setProfileForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const slotsOnSelectedDate = useMemo(() => {
+    return schedule.filter((s) => new Date(s.start).toDateString() === selectedDate.toDateString());
+  }, [schedule, selectedDate]);
 
-  const handleProfileSubmit = (e) => {
-    e.preventDefault();
-    updateUser(profileForm);
-  };
-
-  const handleScheduleChange = (e) => {
-    const { name, value } = e.target;
-    setScheduleForm((prev) => ({ ...prev, [name]: value }));
+  const tileClassName = ({ date, view }) => {
+    if (view === "month") {
+      const hasSlot = schedule.some((s) => new Date(s.start).toDateString() === date.toDateString());
+      return hasSlot ? "has-slots-indicator" : null;
+    }
   };
 
   const handleAddSlot = (e) => {
     e.preventDefault();
-    if (!scheduleForm.start || !scheduleForm.end) return;
-    const startDate = new Date(scheduleForm.start);
-    const endDate = new Date(scheduleForm.end);
-    if (endDate <= startDate) return;
-    addSlot(
-      { start: startDate.toISOString(), end: endDate.toISOString() },
-      {
-        onSuccess: () => setScheduleForm({ start: "", end: "" }),
-      }
-    );
+    const toISO = (t) => {
+      const [h, m] = t.split(":");
+      const d = new Date(selectedDate);
+      d.setHours(parseInt(h), parseInt(m), 0, 0);
+      return d.toISOString();
+    };
+    addSlot({ start: toISO(timeForm.start), end: toISO(timeForm.end) });
   };
 
-  const handleDeleteSlot = (id) => {
-    deleteSlot(id);
-  };
-
-  if (userLoading) {
-    return (
-      <div className="account-container">
-        <div className="account-loading">Loading...</div>
-      </div>
-    );
-  }
-
-  if (!user) return null;
+  if (userLoading) return <div className="loader">Loading...</div>;
 
   return (
-    <div className="account-container">
-      <div className="account-card">
-        <h1>My Account</h1>
+    <div className="account-wrapper">
+      <div className="glass-card">
+        <header className="account-header">
+          <h1>My Account</h1>
+          <p>Manage your profile and availability</p>
+        </header>
 
-        <section className="account-section">
-          <h2>Profile</h2>
-          <form onSubmit={handleProfileSubmit} className="account-form">
-            {updateError && (
-              <div className="account-error">
-                {updateError.response?.data?.message || "Update failed"}
+        {/* Top: profile */}
+        <section className="profile-section">
+          <div className="section-title">
+            <span>01</span>
+            <h2>Profile</h2>
+          </div>
+          <form onSubmit={(e) => { e.preventDefault(); updateUser(profileForm); }} className="profile-form">
+            <div className="profile-grid">
+              <div className="inputs-col">
+                <div className="form-group">
+                  <label>First name</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.name} 
+                    onChange={(e) => setProfileForm({ ...profileForm, name: e.target.value })} 
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Last name</label>
+                  <input 
+                    type="text" 
+                    value={profileForm.lastName} 
+                    onChange={(e) => setProfileForm({ ...profileForm, lastName: e.target.value })} 
+                  />
+                </div>
               </div>
-            )}
-            <div className="input-row">
-              <div className="input-group">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profileForm.name}
-                  onChange={handleProfileChange}
-                  required
-                />
-              </div>
-              <div className="input-group">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={profileForm.lastName}
-                  onChange={handleProfileChange}
-                  required
-                />
+              <div className="about-col">
+                <div className="form-group">
+                  <label>About me</label>
+                  <textarea 
+                    placeholder="Tell us about yourself..."
+                    value={profileForm.aboutMe} 
+                    onChange={(e) => setProfileForm({ ...profileForm, aboutMe: e.target.value })}
+                  />
+                </div>
               </div>
             </div>
-            <div className="input-group">
-              <label>About Me</label>
-              <textarea
-                name="aboutMe"
-                value={profileForm.aboutMe}
-                onChange={handleProfileChange}
-                placeholder="Tell others about yourself..."
-                rows={4}
-              />
-            </div>
-            <div className="input-group readonly">
-              <label>Email</label>
-              <input type="email" value={user.email || ""} readOnly disabled />
-            </div>
-            <button
-              type="submit"
-              className="account-button"
-              disabled={isUpdating}
-            >
-              {isUpdating ? "Saving..." : "Save Profile"}
+            <button type="submit" className="btn-primary" disabled={isUpdating}>
+              {isUpdating ? "Saving..." : "Save profile"}
             </button>
           </form>
         </section>
 
-        <section className="account-section">
-          <h2>Schedule</h2>
-          <p className="section-desc">Add time slots when you're available</p>
+        <div className="divider-glow" />
 
-          <form onSubmit={handleAddSlot} className="schedule-form">
-            {addSlotError && (
-              <div className="account-error">
-                {addSlotErrorData?.response?.data?.message ||
-                  "Failed to add slot"}
-              </div>
-            )}
-            <div className="schedule-inputs">
-              <div className="input-group">
-                <label>Start</label>
-                <input
-                  type="datetime-local"
-                  name="start"
-                  value={scheduleForm.start}
-                  onChange={handleScheduleChange}
-                  required
-                />
-              </div>
-              <div className="input-group">
-                <label>End</label>
-                <input
-                  type="datetime-local"
-                  name="end"
-                  value={scheduleForm.end}
-                  onChange={handleScheduleChange}
-                  required
-                />
+        {/* Bottom: calendar & slots */}
+        <section className="schedule-section">
+          <div className="section-title">
+            <span>02</span>
+            <h2>Schedule & availability</h2>
+          </div>
+          
+          <div className="schedule-grid">
+            <div className="calendar-box">
+              <Calendar 
+                onChange={setSelectedDate} 
+                value={selectedDate} 
+                tileClassName={tileClassName}
+                locale="en-US"
+              />
+            </div>
+
+            <div className="slots-box">
+              <h3>Slots for {selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}</h3>
+              
+              <form onSubmit={handleAddSlot} className="add-slot-row">
+                <input type="time" value={timeForm.start} onChange={(e) => setTimeForm({...timeForm, start: e.target.value})} />
+                <span className="sep">—</span>
+                <input type="time" value={timeForm.end} onChange={(e) => setTimeForm({...timeForm, end: e.target.value})} />
+                <button type="submit" className="btn-add" disabled={isAdding}>+</button>
+              </form>
+
+              <div className="slots-list">
+                {slotsOnSelectedDate.length > 0 ? (
+                  slotsOnSelectedDate.map((slot) => (
+                    <ScheduleItem
+                      key={slot._id}
+                      slot={slot}
+                      onDelete={(id) => deleteSlot(id)}
+                      onUpdate={(payload) => updateSlot(payload)}
+                    />
+                  ))
+                ) : (
+                  <div className="empty-state">No slots for this day</div>
+                )}
               </div>
             </div>
-            <button
-              type="submit"
-              className="account-button schedule-add-btn"
-              disabled={isAdding}
-            >
-              {isAdding ? "Adding..." : "Add Slot"}
-            </button>
-          </form>
-
-          <div className="schedule-list">
-            {scheduleLoading ? (
-              <p className="schedule-empty">Loading schedule...</p>
-            ) : schedule.length === 0 ? (
-              <p className="schedule-empty">No time slots yet</p>
-            ) : (
-              schedule.map((slot) => (
-                <ScheduleItem
-                  key={slot._id}
-                  slot={slot}
-                  onDelete={handleDeleteSlot}
-                />
-              ))
-            )}
           </div>
         </section>
       </div>

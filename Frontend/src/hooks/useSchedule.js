@@ -3,6 +3,7 @@ import {
   getSchedule,
   addScheduleSlot,
   deleteScheduleSlot,
+  updateScheduleSlot,
 } from "../Api/schedule/schedule.api";
 
 export const useSchedule = (enabled = true) => {
@@ -29,6 +30,17 @@ export const useDeleteScheduleSlot = () => {
 
   return useMutation({
     mutationFn: (id) => deleteScheduleSlot(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["schedule"] });
+    },
+  });
+};
+
+export const useUpdateScheduleSlot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, start, end }) => updateScheduleSlot(id, start, end),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["schedule"] });
     },
