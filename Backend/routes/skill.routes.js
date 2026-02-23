@@ -1,11 +1,10 @@
 import express from "express";
-
-import { addSkill,getAll } from "../controllers/skill.controller.js";
-import { verifyToken } from "../middleware/middleware.verifyJwt.js";
+import { addSkill, getAll } from "../controllers/skill.controller.js";
+import { protect } from "../middleware/middleware.auth.js";
 
 const skillRoutes = express.Router();
 skillRoutes.get("/getall", getAll);
-skillRoutes.post("/", verifyToken, addSkill);
+skillRoutes.post("/", protect, addSkill);
 
 
 export default skillRoutes;

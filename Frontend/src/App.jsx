@@ -6,8 +6,19 @@ import LoginPage from "./Pages/Auth/LogIn/LogIn";
 import SignUp from "./Pages/Auth/SignUp/SignUp";
 import AccountPage from "./Pages/Account/AccountPage";
 import MyAdvertsPage from "./Pages/MyAdverts/MyAdvertsPage";
+import { useAuthInit } from "./hooks/useAuthInit";
 
 function App() {
+  const isAuthReady = useAuthInit();
+
+  if (!isAuthReady) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", color: "#94a3b8" }}>
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Navbar />

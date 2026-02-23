@@ -31,11 +31,9 @@ api.interceptors.response.use(
 
       if (!refreshPromise) {
         refreshPromise = axios
-          .post(
-            `${import.meta.env.VITE_BASE_URL}/auth/refresh`,
-            {},
-            { withCredentials: true }
-          )
+          .get(`${import.meta.env.VITE_BASE_URL}/auth/refresh`, {
+            withCredentials: true,
+          })
           .finally(() => {
             refreshPromise = null;
           });
@@ -45,7 +43,8 @@ api.interceptors.response.use(
         await refreshPromise;
         return api(originalRequest);
       } catch (refreshError) {
-        const isSessionInvalid = refreshError.response?.status === 401;
+        const status = refreshError.response?.status;
+        const isSessionInvalid = status === 401 || status === 403;
         if (isSessionInvalid) {
           localStorage.removeItem("user_profile");
           window.location.href = "/auth";

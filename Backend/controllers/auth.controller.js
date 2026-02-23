@@ -43,6 +43,7 @@ export const register = async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     sameSite: "lax",
+    path: "/",
   };
   res.cookie("accessToken", tokens.accessToken, {
     ...cookieOptions,
@@ -80,6 +81,7 @@ export const login = async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     sameSite: "lax",
+    path: "/",
   };
   res.cookie("accessToken", tokens.accessToken, {
     ...cookieOptions,
@@ -115,6 +117,7 @@ export const refresh = async (req, res) => {
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
       sameSite: "lax",
+      path: "/",
       maxAge: 15 * 60 * 1000,
     });
     res.status(200).json("refresh succes");
@@ -126,6 +129,7 @@ export const logout = async (req, res) => {
   try {
     const cookieOptions = {
       httpOnly: true,
+      path: "/",
     };
 
     res.clearCookie("accessToken", cookieOptions);

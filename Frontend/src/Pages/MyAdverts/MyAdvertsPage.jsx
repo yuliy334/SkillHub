@@ -2,15 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUserStore";
 import { useCreateAdvert, useMyAdverts, useDeleteAdvert } from "../../hooks/useAdvert";
-import { useSkills } from "../../hooks/useSkills";
+import { useSkills, useAddSkill } from "../../hooks/useSkills";
 import SkillSelector from "./SkillSelector";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 import "./MyAdvertsPageStyle.css";
 
 const MyAdvertsPage = () => {
   const navigate = useNavigate();
   const { data: user, isLoading: userLoading } = useUser();
   const { data: skills = [], isLoading: skillsLoading } = useSkills();
+  const {
+    mutate: addSkill,
+    isPending: isAddingSkill,
+    isError: addSkillError,
+    error: addSkillErrorData,
+  } = useAddSkill();
   const {
     data: adverts = [],
     isLoading: advertsLoading,
@@ -25,12 +32,27 @@ const MyAdvertsPage = () => {
 
   const [userOffers, setUserOffers] = useState([]);
   const [userWanted, setUserWanted] = useState([]);
+  const [newSkillName, setNewSkillName] = useState("");
 
   useEffect(() => {
     if (!userLoading && !user) {
       navigate("/auth");
     }
   }, [user, userLoading, navigate]);
+
+  const handleAddSkill = (e) => {
+    e.preventDefault();
+    const name = newSkillName.trim();
+    if (!name) return;
+    addSkill(
+      { name },
+      {
+        onSuccess: () => {
+          setNewSkillName("");
+        },
+      }
+    );
+  };
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -66,6 +88,34 @@ const MyAdvertsPage = () => {
 
         <section className="myadverts-section">
           <h2>Create Advert</h2>
+
+          <div className="add-skill-block">
+            <h3>Add new skill</h3>
+            <form onSubmit={handleAddSkill} className="add-skill-form">
+              <input
+                type="text"
+                className="add-skill-input"
+                placeholder="Skill name (e.g. JavaScript, Piano)"
+                value={newSkillName}
+                onChange={(e) => setNewSkillName(e.target.value)}
+                disabled={isAddingSkill}
+              />
+              <button
+                type="submit"
+                className="add-skill-button"
+                disabled={isAddingSkill || !newSkillName.trim()}
+              >
+                <AddIcon fontSize="small" />
+                {isAddingSkill ? "Adding..." : "Add"}
+              </button>
+            </form>
+            {addSkillError && (
+              <div className="myadverts-error add-skill-error">
+                {addSkillErrorData?.response?.data?.message || "Failed to add skill"}
+              </div>
+            )}
+          </div>
+
           <form onSubmit={handleCreate} className="myadverts-form">
             {createError && (
               <div className="myadverts-error">

@@ -51,6 +51,73 @@
   margin-bottom: 20px;
 }
 
+.add-skill-block {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.add-skill-block h3 {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.add-skill-form {
+  display: flex;
+  gap: 10px;
+}
+
+.add-skill-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.add-skill-input:focus {
+  border-color: #61dafb;
+}
+
+.add-skill-input::placeholder {
+  color: #64748b;
+}
+
+.add-skill-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(97, 218, 251, 0.2);
+  border: 1px solid rgba(97, 218, 251, 0.4);
+  border-radius: 10px;
+  color: #61dafb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-skill-button:hover:not(:disabled) {
+  background: rgba(97, 218, 251, 0.3);
+}
+
+.add-skill-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-skill-error {
+  margin-top: 10px;
+}
+
 .myadverts-error {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
