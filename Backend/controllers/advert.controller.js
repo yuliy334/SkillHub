@@ -123,13 +123,35 @@ export const getMyAdverts = async (req, res) => {
     return res.status(500).json({ message: "Error fetching adverts" });
   }
 };
+export const getAdvertById = async (req, res) => {
+  try {
+    const { advertId } = req.params;
+    const advert = await Advert.findById(advertId)
+      .select("-deals")
+      .populate({
+        path: "userId",
+        select: "name lastName schedule",
+      })
+      .populate("userWanted userOffers", "name")
+      .lean();
+
+    if (!advert) {
+      return res.status(404).json({ message: "Advert not found" });
+    }
+
+    return res.status(200).json(advert);
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching advert" });
+  }
+};
+
 export const getAllAdverts = async (req, res) => {
   try {
     const adverts = await Advert.find()
       .select("-deals")
       .populate({
         path: "userId",
-        select: "name lastName",
+        select: "_id name lastName",
       })
       .populate("userWanted userOffers", "name")
       .lean();

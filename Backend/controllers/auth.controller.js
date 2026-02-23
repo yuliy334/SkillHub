@@ -57,7 +57,7 @@ export const register = async (req, res) => {
   return res.status(201).json({
     success: true,
     message: "user created",
-    account: { name, lastName, email, aboutMe: user.aboutMe ?? null },
+    account: { id: user._id, name, lastName, email, aboutMe: user.aboutMe ?? null },
   });
 };
 
@@ -94,6 +94,7 @@ export const login = async (req, res) => {
   return res.status(200).json({
     success: true,
     account: {
+      id: check._id,
       name: check.name,
       lastName: check.lastName,
       email: check.email,
@@ -145,6 +146,7 @@ export const logout = async (req, res) => {
 };
 export const me = async (req, res) => {
   return res.status(200).json({
+    id: req.user._id,
     name: req.user.name,
     lastName: req.user.lastName,
     email: req.user.email,

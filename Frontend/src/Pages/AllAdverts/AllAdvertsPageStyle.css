@@ -86,10 +86,36 @@
 }
 
 .alladvert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   padding: 20px 24px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
+}
+
+.alladvert-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.alladvert-offer-btn {
+  padding: 10px 18px;
+  background: rgba(97, 218, 251, 0.2);
+  border: 1px solid rgba(97, 218, 251, 0.4);
+  border-radius: 10px;
+  color: #61dafb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.alladvert-offer-btn:hover {
+  background: rgba(97, 218, 251, 0.3);
 }
 
 .alladvert-author {

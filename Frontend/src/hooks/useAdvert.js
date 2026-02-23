@@ -3,6 +3,8 @@ import {
   createAdvert,
   getMyAdverts,
   getAllAdverts,
+  getAdvertById,
+  createDeal,
   deleteAdvert,
 } from "../Api/advert/advert.api";
 
@@ -37,6 +39,27 @@ export const useAllAdverts = (enabled = true) => {
       return data.adverts || [];
     },
     enabled,
+  });
+};
+
+export const useAdvertById = (advertId, enabled = true) => {
+  return useQuery({
+    queryKey: ["advert", advertId],
+    queryFn: () => getAdvertById(advertId),
+    enabled: !!advertId && enabled,
+  });
+};
+
+export const useCreateDeal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ advertId, dealData }) => createDeal(advertId, dealData),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["adverts"] });
+      queryClient.invalidateQueries({ queryKey: ["advert", variables.advertId] });
+      queryClient.invalidateQueries({ queryKey: ["myAdverts"] });
+    },
   });
 };
 

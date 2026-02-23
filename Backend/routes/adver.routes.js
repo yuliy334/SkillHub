@@ -5,6 +5,7 @@ import {
   addDeal,
   deleteAdvert,
   getMyAdverts,
+  getAdvertById,
   updateAdvertSkills,
   getAllAdverts,
 } from "../controllers/advert.controller.js";
@@ -19,6 +20,7 @@ adverRouter.use(protect);
 
 adverRouter.get("/myAdverts", getMyAdverts);
 adverRouter.get("/", getAllAdverts);
+adverRouter.get("/:advertId", getAdvertById);
 adverRouter.post("/", addAdvert);
 adverRouter.delete("/:advertId", protectAdvert, deleteAdvert);
 adverRouter.patch("/:advertId", protectAdvert, updateAdvertSkills);

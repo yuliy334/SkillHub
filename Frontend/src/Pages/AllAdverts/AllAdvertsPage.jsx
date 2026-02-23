@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { useAllAdverts } from "../../hooks/useAdvert";
 import { useSkills } from "../../hooks/useSkills";
+import { useUser } from "../../hooks/useUserStore";
 import SkillSelector from "../MyAdverts/SkillSelector";
+import CreateOfferModal from "./CreateOfferModal";
 import "./AllAdvertsPageStyle.css";
 
 const AllAdvertsPage = () => {
+  const { data: user } = useUser();
   const { data: adverts = [], isLoading: advertsLoading } = useAllAdverts();
   const { data: skills = [], isLoading: skillsLoading } = useSkills();
   const [filterWantIds, setFilterWantIds] = useState([]);
@@ -27,6 +30,12 @@ const AllAdvertsPage = () => {
   }, [adverts, filterWantIds, filterOfferIds]);
 
   const hasActiveFilters = filterWantIds.length > 0 || filterOfferIds.length > 0;
+  const [offerModalAdvertId, setOfferModalAdvertId] = useState(null);
+
+  const isOwnAdvert = (advert) => {
+    const ownerId = advert.userId?._id || advert.userId;
+    return user?.id && String(ownerId) === String(user.id);
+  };
 
   return (
     <div className="alladverts-container">
@@ -73,24 +82,42 @@ const AllAdvertsPage = () => {
           ) : (
             filteredAdverts.map((advert) => (
               <div key={advert._id} className="alladvert-item">
-                <div className="alladvert-author">
-                  {advert.userId?.name} {advert.userId?.lastName}
-                </div>
-                <div className="alladvert-skills">
-                  <div>
-                    <span className="alladvert-label">Offers:</span>{" "}
-                    {advert.userOffers?.map((s) => s?.name).join(", ") || "—"}
+                <div className="alladvert-main">
+                  <div className="alladvert-author">
+                    {advert.userId?.name} {advert.userId?.lastName}
                   </div>
-                  <div>
-                    <span className="alladvert-label">Wants:</span>{" "}
-                    {advert.userWanted?.map((s) => s?.name).join(", ") || "—"}
+                  <div className="alladvert-skills">
+                    <div>
+                      <span className="alladvert-label">Offers:</span>{" "}
+                      {advert.userOffers?.map((s) => s?.name).join(", ") || "—"}
+                    </div>
+                    <div>
+                      <span className="alladvert-label">Wants:</span>{" "}
+                      {advert.userWanted?.map((s) => s?.name).join(", ") || "—"}
+                    </div>
                   </div>
                 </div>
+                {user && !isOwnAdvert(advert) && (
+                  <button
+                    type="button"
+                    className="alladvert-offer-btn"
+                    onClick={() => setOfferModalAdvertId(advert._id)}
+                  >
+                    Create offer
+                  </button>
+                )}
               </div>
             ))
           )}
         </div>
       </div>
+
+      {offerModalAdvertId && (
+        <CreateOfferModal
+          advertId={offerModalAdvertId}
+          onClose={() => setOfferModalAdvertId(null)}
+        />
+      )}
     </div>
   );
 };

@@ -15,6 +15,16 @@ export const getAllAdverts = async () => {
   return res.data;
 };
 
+export const getAdvertById = async (advertId) => {
+  const res = await api.get(`/advert/${advertId}`);
+  return res.data;
+};
+
+export const createDeal = async (advertId, dealData) => {
+  const res = await api.post(`/advert/${advertId}/deals`, dealData);
+  return res.data;
+};
+
 export const deleteAdvert = async (advertId) => {
   const res = await api.delete(`/advert/${advertId}`);
   return res.data;
