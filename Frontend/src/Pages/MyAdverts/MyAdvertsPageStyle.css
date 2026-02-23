@@ -212,11 +212,100 @@
   font-weight: 600;
 }
 
-.advert-deals {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 0.8rem;
+.advert-deals-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deal-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+
+.deal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+}
+
+.deal-from {
+  font-weight: 600;
+  color: #61dafb;
+}
+
+.deal-wants,
+.deal-offers {
   color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.deal-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.deal-status-accepted {
+  color: #4ade80;
+}
+
+.deal-status-rejected {
+  color: #f87171;
+}
+
+.deal-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.deal-accept-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(74, 222, 128, 0.15);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 8px;
+  color: #4ade80;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deal-accept-btn:hover {
+  background: rgba(74, 222, 128, 0.25);
+}
+
+.deal-reject-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.deal-reject-btn:hover {
+  background: rgba(248, 113, 113, 0.25);
 }
 
 .advert-delete-btn {

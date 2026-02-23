@@ -6,6 +6,8 @@ import {
   getAdvertById,
   createDeal,
   deleteAdvert,
+  acceptDeal,
+  rejectDeal,
 } from "../Api/advert/advert.api";
 
 export const useCreateAdvert = () => {
@@ -70,6 +72,28 @@ export const useDeleteAdvert = () => {
     mutationFn: (advertId) => deleteAdvert(advertId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["adverts"] });
+      queryClient.invalidateQueries({ queryKey: ["myAdverts"] });
+    },
+  });
+};
+
+export const useAcceptDeal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ advertId, dealId }) => acceptDeal(advertId, dealId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myAdverts"] });
+    },
+  });
+};
+
+export const useRejectDeal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ advertId, dealId }) => rejectDeal(advertId, dealId),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myAdverts"] });
     },
   });

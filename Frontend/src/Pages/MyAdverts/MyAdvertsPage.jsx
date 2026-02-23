@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUserStore";
-import { useCreateAdvert, useMyAdverts, useDeleteAdvert } from "../../hooks/useAdvert";
+import { useCreateAdvert, useMyAdverts, useDeleteAdvert, useAcceptDeal, useRejectDeal } from "../../hooks/useAdvert";
 import { useSkills, useAddSkill } from "../../hooks/useSkills";
 import SkillSelector from "./SkillSelector";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 import "./MyAdvertsPageStyle.css";
 
 const MyAdvertsPage = () => {
@@ -29,6 +31,8 @@ const MyAdvertsPage = () => {
     error: createErrorData,
   } = useCreateAdvert();
   const { mutate: deleteAdvert } = useDeleteAdvert();
+  const { mutate: acceptDeal } = useAcceptDeal();
+  const { mutate: rejectDeal } = useRejectDeal();
 
   const [userOffers, setUserOffers] = useState([]);
   const [userWanted, setUserWanted] = useState([]);
@@ -183,7 +187,50 @@ const MyAdvertsPage = () => {
                       </div>
                     </div>
                     {advert.deals?.length > 0 && (
-                      <span className="advert-deals">{advert.deals.length} deal(s)</span>
+                      <div className="advert-deals-list">
+                        {advert.deals.map((deal) => (
+                          <div key={deal._id} className="deal-card">
+                            <div className="deal-info">
+                              <span className="deal-from">
+                                From: {deal.requesterId?.name || "User"}
+                              </span>
+                              <span className="deal-wants">
+                                Wants: {deal.requestorOffers?.map((s) => s?.name).join(", ") || "—"}
+                              </span>
+                              <span className="deal-offers">
+                                Offers: {deal.requestorWanted?.map((s) => s?.name).join(", ") || "—"}
+                              </span>
+                              {deal.status !== "pending" && (
+                                <span className={`deal-status deal-status-${deal.status}`}>
+                                  {deal.status}
+                                </span>
+                              )}
+                            </div>
+                            {deal.status === "pending" && (
+                              <div className="deal-actions">
+                                <button
+                                  type="button"
+                                  className="deal-accept-btn"
+                                  onClick={() => acceptDeal({ advertId: advert._id, dealId: deal._id })}
+                                  title="Accept"
+                                >
+                                  <CheckCircleIcon fontSize="small" />
+                                  Accept
+                                </button>
+                                <button
+                                  type="button"
+                                  className="deal-reject-btn"
+                                  onClick={() => rejectDeal({ advertId: advert._id, dealId: deal._id })}
+                                  title="Reject"
+                                >
+                                  <CancelIcon fontSize="small" />
+                                  Reject
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
                   <button

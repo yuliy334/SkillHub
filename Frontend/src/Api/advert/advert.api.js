@@ -29,3 +29,13 @@ export const deleteAdvert = async (advertId) => {
   const res = await api.delete(`/advert/${advertId}`);
   return res.data;
 };
+
+export const acceptDeal = async (advertId, dealId) => {
+  const res = await api.patch(`/advert/${advertId}/deals/${dealId}/accept`);
+  return res.data;
+};
+
+export const rejectDeal = async (advertId, dealId) => {
+  const res = await api.patch(`/advert/${advertId}/deals/${dealId}/reject`);
+  return res.data;
+};
