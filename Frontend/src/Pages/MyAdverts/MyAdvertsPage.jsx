@@ -10,6 +10,15 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import "./MyAdvertsPageStyle.css";
 
+const formatDateTime = (dateStr) => {
+  if (!dateStr) return "—";
+  const d = new Date(dateStr);
+  return d.toLocaleString(undefined, {
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+};
+
 const MyAdvertsPage = () => {
   const navigate = useNavigate();
   const { data: user, isLoading: userLoading } = useUser();
@@ -199,6 +208,9 @@ const MyAdvertsPage = () => {
                               </span>
                               <span className="deal-offers">
                                 Offers: {deal.requestorWanted?.map((s) => s?.name).join(", ") || "—"}
+                              </span>
+                              <span className="deal-time">
+                                Time: {formatDateTime(deal.startTime)} — {formatDateTime(deal.endTime)}
                               </span>
                               {deal.status !== "pending" && (
                                 <span className={`deal-status deal-status-${deal.status}`}>
