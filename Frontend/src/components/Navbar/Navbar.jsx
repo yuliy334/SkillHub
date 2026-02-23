@@ -28,8 +28,7 @@ const Navbar = () => {
 
   const links = user
     ? [
-        { path: "/", label: "Home" },
-        { path: "/my-adverts", label: "My Adverts" },
+        { path: "/", label: "Home" },,
       ]
     : [{ path: "/", label: "Home" }];
 

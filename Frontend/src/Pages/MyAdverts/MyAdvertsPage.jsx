@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../hooks/useUserStore";
 import { useCreateAdvert, useMyAdverts, useDeleteAdvert } from "../../hooks/useAdvert";
 import { useSkills } from "../../hooks/useSkills";
+import SkillSelector from "./SkillSelector";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./MyAdvertsPageStyle.css";
 
@@ -30,14 +31,6 @@ const MyAdvertsPage = () => {
       navigate("/auth");
     }
   }, [user, userLoading, navigate]);
-
-  const toggleSkill = (skillId, list, setList) => {
-    setList((prev) =>
-      prev.includes(skillId)
-        ? prev.filter((id) => id !== skillId)
-        : [...prev, skillId]
-    );
-  };
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -89,37 +82,21 @@ const MyAdvertsPage = () => {
                 <div className="skills-grid">
                   <div className="skills-column">
                     <h3>Skills I offer</h3>
-                    <div className="skills-checkboxes">
-                      {skills.map((skill) => (
-                        <label key={skill._id} className="skill-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={userOffers.includes(skill._id)}
-                            onChange={() =>
-                              toggleSkill(skill._id, userOffers, setUserOffers)
-                            }
-                          />
-                          <span>{skill.name}</span>
-                        </label>
-                      ))}
-                    </div>
+                    <SkillSelector
+                      skills={skills}
+                      selectedIds={userOffers}
+                      onChange={setUserOffers}
+                      placeholder="Search skills to offer..."
+                    />
                   </div>
                   <div className="skills-column">
                     <h3>Skills I want</h3>
-                    <div className="skills-checkboxes">
-                      {skills.map((skill) => (
-                        <label key={skill._id} className="skill-checkbox">
-                          <input
-                            type="checkbox"
-                            checked={userWanted.includes(skill._id)}
-                            onChange={() =>
-                              toggleSkill(skill._id, userWanted, setUserWanted)
-                            }
-                          />
-                          <span>{skill.name}</span>
-                        </label>
-                      ))}
-                    </div>
+                    <SkillSelector
+                      skills={skills}
+                      selectedIds={userWanted}
+                      onChange={setUserWanted}
+                      placeholder="Search skills you need..."
+                    />
                   </div>
                 </div>
                 <button
