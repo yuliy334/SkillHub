@@ -223,12 +223,20 @@ export const getMyAdverts = async (req, res) => {
         populate: [
           { path: "requestorWanted", select: "name" },
           { path: "requestorOffers", select: "name" },
-          { path: "requesterId", select: "name" },
+          { path: "requesterId", select: "name lastName email" },
         ],
       })
       .populate("userWanted", "name")
       .populate("userOffers", "name")
-      .lean();// с монгуса на джаез
+      .lean();
+
+    for (const advert of adverts) {
+      for (const deal of advert.deals || []) {
+        if (deal.status !== "accepted" && deal.requesterId && "email" in deal.requesterId) {
+          delete deal.requesterId.email;
+        }
+      }
+    }
     return res.status(200).json({ adverts });
   } catch (error) {
     return res.status(500).json({ message: "Error fetching adverts" });

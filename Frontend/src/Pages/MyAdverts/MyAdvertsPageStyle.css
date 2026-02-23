@@ -249,6 +249,22 @@
   font-size: 0.8rem;
 }
 
+.deal-contact {
+  display: block;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin-top: 4px;
+}
+
+.deal-email {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.deal-email:hover {
+  text-decoration: underline;
+}
+
 .deal-status {
   font-size: 0.75rem;
   font-weight: 600;

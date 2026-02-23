@@ -212,6 +212,14 @@ const MyAdvertsPage = () => {
                               <span className="deal-time">
                                 Time: {formatDateTime(deal.startTime)} — {formatDateTime(deal.endTime)}
                               </span>
+                              {deal.status === "accepted" && deal.requesterId?.email && (
+                                <span className="deal-contact">
+                                  Contact:{" "}
+                                  <a href={`mailto:${deal.requesterId.email}`} className="deal-email">
+                                    {deal.requesterId.email}
+                                  </a>
+                                </span>
+                              )}
                               {deal.status !== "pending" && (
                                 <span className={`deal-status deal-status-${deal.status}`}>
                                   {deal.status}
