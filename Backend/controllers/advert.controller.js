@@ -2,6 +2,52 @@ import Advert from "../models/advert.module.js";
 import User from "../models/user.module.js";
 import Skill from "../models/skill.module.js";
 
+const cleanupExpiredDealsAndSlots = async () => {
+  const now = new Date();
+  const advertsWithExpiredDeals = await Advert.find({
+    "deals.endTime": { $lt: now },
+  });
+
+  if (!advertsWithExpiredDeals.length) return;
+
+  const ownerToSlots = new Map();
+
+  for (const advert of advertsWithExpiredDeals) {
+    const remainingDeals = [];
+
+    for (const deal of advert.deals) {
+      if (deal.endTime && deal.endTime < now) {
+        const ownerIdStr = advert.userId?.toString();
+        const slotIdStr = deal.scheduleSlotId?.toString();
+        if (ownerIdStr && slotIdStr) {
+          if (!ownerToSlots.has(ownerIdStr)) {
+            ownerToSlots.set(ownerIdStr, new Set());
+          }
+          ownerToSlots.get(ownerIdStr).add(slotIdStr);
+        }
+      } else {
+        remainingDeals.push(deal);
+      }
+    }
+
+    advert.deals = remainingDeals;
+    await advert.save();
+  }
+
+  for (const [ownerId, slotIds] of ownerToSlots.entries()) {
+    const user = await User.findById(ownerId);
+    if (!user) continue;
+
+    for (const slotId of slotIds) {
+      if (user.schedule.id(slotId)) {
+        user.schedule.pull(slotId);
+      }
+    }
+
+    await user.save();
+  }
+};
+
 export const addAdvert = async (req, res) => {
   try {
     const { userWanted, userOffers } = req.body;
@@ -115,6 +161,7 @@ export const addDeal = async (req, res) => {
 
 export const getMyDeals = async (req, res) => {
   try {
+    await cleanupExpiredDealsAndSlots();
     const userId = req.user.id;
     const adverts = await Advert.find({ "deals.requesterId": userId })
       .populate("userId", "name lastName email")
@@ -168,6 +215,7 @@ export const getMyDeals = async (req, res) => {
 
 export const getMyAdverts = async (req, res) => {
   try {
+    await cleanupExpiredDealsAndSlots();
     const userId = req.user.id;
     const adverts = await Advert.find({ userId })
       .populate({
@@ -188,6 +236,7 @@ export const getMyAdverts = async (req, res) => {
 };
 export const getAdvertById = async (req, res) => {
   try {
+    await cleanupExpiredDealsAndSlots();
     const { advertId } = req.params;
     const advert = await Advert.findById(advertId)
       .select("-deals")
@@ -216,6 +265,7 @@ export const getAdvertById = async (req, res) => {
 
 export const getAllAdverts = async (req, res) => {
   try {
+    await cleanupExpiredDealsAndSlots();
     const adverts = await Advert.find()
       .select("-deals")
       .populate({

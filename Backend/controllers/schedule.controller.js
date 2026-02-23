@@ -1,5 +1,17 @@
+const cleanupExpiredScheduleSlots = async (user) => {
+  const now = new Date();
+  const originalLength = user.schedule.length;
+
+  user.schedule = user.schedule.filter((entry) => entry.end > now);
+
+  if (user.schedule.length !== originalLength) {
+    await user.save();
+  }
+};
+
 export const getAllSchedule = async (req, res) => {
   try {
+    await cleanupExpiredScheduleSlots(req.user);
     const schedule = req.user.schedule;
 
     return res.status(200).json(schedule);
