@@ -34,7 +34,40 @@
 .alladverts-subtitle {
   color: #94a3b8;
   font-size: 0.95rem;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+}
+
+.alladverts-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.filter-column {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.filter-column h3 {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.filter-hint {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 640px) {
+  .alladverts-filters {
+    grid-template-columns: 1fr;
+  }
 }
 
 .alladverts-list {
